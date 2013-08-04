@@ -1,25 +1,27 @@
-var Histogram = require('../').histogram;
+var Cumulative = require('../').cumulative;
 var a = require('assert');
 
 var testArraySkewed =  [1, 2, 2, 3, 3, 3, 4, 4, 4, 4, 5, 5, 5, 5, 5, 6, 6, 6, 6, 6, 6, 7, 7, 7, 7, 7, 7, 7, 8, 8, 8, 8, 8, 8, 8, 8, 9, 9, 9, 9, 9, 9, 9, 9, 9];
 var testArrayUniform = [1, 2, 3, 4, 5, 6, 7, 8, 9, 1, 2, 3, 4, 5, 6, 7, 8, 9, 1, 2, 3, 4, 5, 6, 7, 8, 9, 1, 2, 3, 4, 5, 6, 7, 8, 9, 1, 2, 3, 4, 5, 6, 7, 8, 9];
 
-describe('histogram', function(){
+describe('cumulative', function(){
 
 	it('should have uniform binning given a uniform array', function(){
-		var h = new Histogram(3, testArrayUniform);
+		var c = new Cumulative(3, testArrayUniform);
 
-		a.equal(h.binCounts[0], h.binCounts[1]);
-		a.equal(h.binCounts[1], h.binCounts[2]);
-		a.equal(h.binCounts[2], h.binCounts[0]);
+		a.equal(c.binCounts[0], 15);
+		a.equal(c.binCounts[1], c.binCounts[0] + 15);
+		a.equal(c.binCounts[2], c.binCounts[1] + 15);
+		a.equal(c.binCounts[2], 45);
 	});
 
 	it('should have skewed binning given a skewed array', function(){
-		var h = new Histogram(3, testArraySkewed);
+		var c = new Cumulative(3, testArraySkewed);
 
-		a.equal(h.binCounts[0], 6);
-		a.equal(h.binCounts[1], 15);
-		a.equal(h.binCounts[2], 24);
+		a.equal(c.binCounts[0], 6);
+		a.equal(c.binCounts[1], c.binCounts[0] + 15);
+		a.equal(c.binCounts[2], c.binCounts[1] + 24);
+		a.equal(c.binCounts[2], 45);
 	});
 
 });
